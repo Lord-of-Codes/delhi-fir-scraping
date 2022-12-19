@@ -73,7 +73,7 @@ for year in range(15,16):
 					break_count+=1
 					continue
 				
-				path = Path.cwd().joinpath("data", 20"+year, districts[district], name)
+				path = Path.cwd().joinpath("data", "20"+year, districts[district], name)
 				path.mkdir(parents=True, exist_ok=True)
 				filename = path.joinpath(code + year + number + ".pdf")
 				filename.write_bytes(pdf_data)
