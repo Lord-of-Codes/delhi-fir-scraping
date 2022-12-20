@@ -3,7 +3,7 @@ import time
 from pathlib import Path
 
 districts = {
-	"8162" : "CENTRAL",
+	# "8162" : "CENTRAL",
 	"8176" : "DWARKA",
 	"8168" : "EAST",
 	"8956" : "EOW",
@@ -31,19 +31,38 @@ districts = {
 police_stations_get_url = "https://cctns.delhipolice.gov.in/citizen/getfirsearchpolicestations.htm"
 pdf_get_url = "https://cctns.delhipolice.gov.in/citizen/gefirprint.htm?"
 
-for year in range(15,16):
+skip_flag = True
+
+for year in range(18,19):
 	for district in districts.keys():
 		post_data = {
 			"districtCd": district,
 			"time": str(int(time.time()))
 		}
 
-		police_stations_json = (requests.post(police_stations_get_url, data = post_data)).json()
+		try:
+			police_stations_json = (requests.post(police_stations_get_url, data = post_data)).json()
+		except:
+			while(True):
+				try:
+					police_stations_json = (requests.post(police_stations_get_url, data = post_data)).json()
+					if police_stations_json:
+						break
+				except:
+					print(str(int(time.time())) + " fetching police stations")
+					time.sleep(60)
+
 
 		for station in police_stations_json["rows"]:
 			code = station[0]
 			name = station[1] 
 			# print(code, name)
+
+			# if skip_flag and name != 'PATEL NAGAR':
+			# 	continue
+			# else:
+			# 	skip_flag = False
+				
 
 			year = str(year)
 			break_count =0
