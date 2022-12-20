@@ -84,13 +84,13 @@ for year in range(17,18):
 				
 				req_string = pdf_get_url+"firRegNo="+code+year+number
 				try:
-					pdf_resp = requests.get(req_string, timeout=5)
+					pdf_resp = requests.get(req_string, timeout=3)
 				except:
-					try:
-						pdf_resp = requests.get(req_string, timeout=5)
-					except:
-						break_count+=1
-						continue
+					# try:
+					# 	pdf_resp = requests.get(req_string, timeout=5)
+					# except:
+					break_count+=1
+					continue
 
 				pdf_data = pdf_resp.content
 				

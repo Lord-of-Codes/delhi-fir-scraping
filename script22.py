@@ -53,7 +53,6 @@ for year in range(22,23):
 					print(str(int(time.time())) + " fetching police stations")
 					time.sleep(60)
 
-
 		for station in police_stations_json["rows"]:
 			code = station[0]
 			name = station[1] 
@@ -64,7 +63,6 @@ for year in range(22,23):
 			# else:
 			# 	skip_flag = False
 				
-
 			year = str(year)
 			break_count =0
 
@@ -84,13 +82,13 @@ for year in range(22,23):
 				
 				req_string = pdf_get_url+"firRegNo="+code+year+number
 				try:
-					pdf_resp = requests.get(req_string, timeout=5)
+					pdf_resp = requests.get(req_string, timeout=3)
 				except:
-					try:
-						pdf_resp = requests.get(req_string, timeout=5)
-					except:
-						break_count+=1
-						continue
+					# try:
+					# 	pdf_resp = requests.get(req_string, timeout=5)
+					# except:
+					break_count+=1
+					continue
 
 				pdf_data = pdf_resp.content
 				
