@@ -79,6 +79,7 @@ for year in range(21,22):
 				filename = path.joinpath(code + year + number + ".pdf")
 
 				if os.path.exists(filename):
+					print(filename + "file already present")
 					continue
 				
 				req_string = pdf_get_url+"firRegNo="+code+year+number
