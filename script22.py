@@ -3,29 +3,29 @@ import time
 from pathlib import Path
 
 districts = {
-	"8162" : "CENTRAL",
-	"8176" : "DWARKA",
-	"8168" : "EAST",
-	"8956" : "EOW",
-	"8169" : "IGI AIRPORT",
-	"8160" : "METRO",
-	"8165" : "NEW DELHI",
-	"8166" : "NORTH",
-	"8173" : "NORTH EAST",
-	"8175" : "CRIME BRANCH",
-	"8172" : "NORTH WEST",
-	"8174" : "OUTER DISTRICT",
-	"8991" : "OUTER NORTH",
-	"8164" : "RAILWAYS",
-	"8959" : "ROHINI",
-	"8957" : "SHAHDARA",
-	"8167" : "SOUTH",
-	"8171" : "SOUTH WEST",
-	"8955" : "SOUTH-EAST",
-	"8954" : "SPECIAL CELL",
-	"8953" : "SPECIAL POLICE UNIT FOR WOMEN & CHILDREN",
-	"8161" : "VIGILANCE",
-	"8170" : "WEST"
+	"8160": "METRO",
+	"8161": "VIGILANCE",
+	"8162": "CENTRAL",
+	"8164": "RAILWAYS",
+	"8165": "NEW DELHI",
+	"8166": "NORTH",
+	"8167": "SOUTH",
+	"8168": "EAST",
+	"8169": "IGI AIRPORT",
+	"8170": "WEST",
+	"8171": "SOUTH WEST",
+	"8172": "NORTH WEST",
+	"8173": "NORTH EAST",
+	"8174": "OUTER DISTRICT",
+	"8175": "CRIME BRANCH",
+	"8176": "DWARKA",
+	"8953": "SPECIAL POLICE UNIT FOR WOMEN & CHILDREN",
+	"8954": "SPECIAL CELL",
+	"8955": "SOUTH-EAST",
+	"8956": "EOW",
+	"8957": "SHAHDARA",
+	"8959": "ROHINI",
+	"8991": "OUTER NORTH"
 }
 
 police_stations_get_url = "https://cctns.delhipolice.gov.in/citizen/getfirsearchpolicestations.htm"
@@ -69,7 +69,7 @@ for year in range(22,23):
 
 			for number in range(1,10000):
 
-				if break_count > 4:
+				if break_count > 4 and number > 1000:
 					break
 
 				number = "{:04d}".format(number)
