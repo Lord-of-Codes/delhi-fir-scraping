@@ -1,6 +1,7 @@
 import requests
 import time
 from pathlib import Path
+import os
 
 districts = {
 	"8160": "METRO",
@@ -73,9 +74,14 @@ for year in range(19,20):
 					break
 
 				number = "{:04d}".format(number)
-				req_string = pdf_get_url+"firRegNo="+code+year+number
-				# print(req_string)
 
+				path = Path.cwd().joinpath("data", "20"+year, districts[district], name)
+				filename = path.joinpath(code + year + number + ".pdf")
+
+				if os.path.exists(filename):
+					continue
+				
+				req_string = pdf_get_url+"firRegNo="+code+year+number
 				try:
 					pdf_resp = requests.get(req_string, timeout=5)
 				except:
@@ -91,9 +97,7 @@ for year in range(19,20):
 					break_count+=1
 					continue
 				
-				path = Path.cwd().joinpath("data", "20"+year, districts[district], name)
 				path.mkdir(parents=True, exist_ok=True)
-				filename = path.joinpath(code + year + number + ".pdf")
 				filename.write_bytes(pdf_data)
 				print(filename)
 				break_count = 0
