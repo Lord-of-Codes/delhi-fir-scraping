@@ -92,6 +92,10 @@ for year in range(20,21):
 					break_count+=1
 					continue
 
+				if pdf_resp.status_code == 404:
+					break_count+=1
+					continue
+				
 				pdf_data = pdf_resp.content
 				
 				if not pdf_data:
