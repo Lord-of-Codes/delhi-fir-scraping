@@ -30,12 +30,12 @@ districts = {
 }
 
 police_stations_get_url = "https://cctns.delhipolice.gov.in/citizen/getfirsearchpolicestations.htm"
-pdf_get_url = "https://cctns.delhipolice.gov.in/citizen/gefirprint.htm?"
+pdf_get_url = "https://cctns.delhipolice.gov.in/citizen/gefirprint.htm?firRegNo="
 
 skip_flag = True
 
 for year in range(22,23):
-	for district in districts.keys():
+	for district in sorted(districts.keys(), reverse=True):
 		post_data = {
 			"districtCd": district,
 			"time": str(int(time.time()))
@@ -80,7 +80,7 @@ for year in range(22,23):
 					print(str(filename) + "\tfile already present")
 					continue
 				
-				req_string = pdf_get_url+"firRegNo="+code+year+number
+				req_string = pdf_get_url+code+year+number
 				try:
 					pdf_resp = requests.get(req_string, timeout=3)
 				except:
@@ -90,7 +90,7 @@ for year in range(22,23):
 					break_count+=1
 					continue
 
-				if pdf_resp.status_code == 404:
+				if pdf_resp.status_code != 200:
 					break_count+=1
 					continue
 

@@ -35,7 +35,7 @@ pdf_get_url = "https://cctns.delhipolice.gov.in/citizen/gefirprint.htm?"
 skip_flag = True
 
 for year in range(15,16):
-	for district in districts.keys():
+	for district in sorted(districts.keys(), reverse=True):
 		post_data = {
 			"districtCd": district,
 			"time": str(int(time.time()))
@@ -92,7 +92,7 @@ for year in range(15,16):
 					break_count+=1
 					continue
 
-				if pdf_resp.status_code == 404:
+				if pdf_resp.status_code !=200:
 					break_count+=1
 					continue
 				
