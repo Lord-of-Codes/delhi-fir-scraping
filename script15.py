@@ -3,6 +3,7 @@ import time
 from pathlib import Path
 import os
 
+year = 15
 districts = {
 	"8160": "METRO",
 	"8161": "VIGILANCE",
@@ -30,79 +31,60 @@ districts = {
 }
 
 police_stations_get_url = "https://cctns.delhipolice.gov.in/citizen/getfirsearchpolicestations.htm"
-pdf_get_url = "https://cctns.delhipolice.gov.in/citizen/gefirprint.htm?"
+pdf_get_url = "https://cctns.delhipolice.gov.in/citizen/getSearchfirprint.htm?RegNo="
 
-skip_flag = True
+for district in sorted(districts.keys(), reverse=True):
+	post_data = {
+		"districtCd": district,
+		"time": str(int(time.time()))
+	}
 
-for year in range(15,16):
-	for district in sorted(districts.keys(), reverse=True):
-		post_data = {
-			"districtCd": district,
-			"time": str(int(time.time()))
-		}
-
-		try:
-			police_stations_json = (requests.post(police_stations_get_url, data = post_data)).json()
-		except:
-			while(True):
-				try:
-					police_stations_json = (requests.post(police_stations_get_url, data = post_data)).json()
-					if police_stations_json:
-						break
-				except:
-					print(str(int(time.time())) + " fetching police stations")
-					time.sleep(60)
-
-
-		for station in police_stations_json["rows"]:
-			code = station[0]
-			name = station[1] 
-			# print(code, name)
-
-			# if skip_flag and name != 'PATEL NAGAR':
-			# 	continue
-			# else:
-			# 	skip_flag = False
-				
-
-			year = str(year)
-			break_count =0
-
-			for number in range(1,10000):
-
-				if break_count > 4 and number > 1000:
+	try:
+		police_stations_json = (requests.post(police_stations_get_url, data = post_data)).json()
+	except:
+		while(True):
+			try:
+				police_stations_json = (requests.post(police_stations_get_url, data = post_data)).json()
+				if police_stations_json:
 					break
+			except:
+				print(str(int(time.time())) + " fetching police stations")
+				time.sleep(60)
 
-				number = "{:04d}".format(number)
+	for station in police_stations_json["rows"]:
+		code = station[0]
+		name = station[1] 
+			
+		year = str(year)
+		break_count =0
 
-				path = Path.cwd().joinpath("data", "20"+year, districts[district], name)
-				filename = path.joinpath(code + year + number + ".pdf")
+		for number in range(1,10000):
 
-				if os.path.exists(filename):
-					print(str(filename) + "\tfile already present")
-					continue
-				
-				req_string = pdf_get_url+"firRegNo="+code+year+number
-				try:
-					pdf_resp = requests.get(req_string, timeout=3)
-				except:
-					# try:
-					# 	pdf_resp = requests.get(req_string, timeout=5)
-					# except:
-					break_count+=1
-					continue
+			if break_count > 4 and number > 1000:
+				break
 
-				if pdf_resp.status_code !=200:
-					break_count+=1
-					continue
-				
-				pdf_data = pdf_resp.content
-				
-				if not pdf_data:
-					break_count+=1
-					continue
-				
-				path.mkdir(parents=True, exist_ok=True)
-				filename.write_bytes(pdf_data)
-				print(filename)
-				break_count = 0
+			number = "{:04d}".format(number)
+
+			path = Path.cwd().joinpath("data", "20"+year, districts[district], name)
+			filename = path.joinpath(code + year + number + ".pdf")
+
+			if os.path.exists(filename):
+				print("\033[93m" + str(filename) + "\tfile already present")
+				continue
+			
+			req_string = pdf_get_url+code+year+number+"&stov="
+			try:
+				pdf_resp = requests.get(req_string, timeout=3)
+			except:
+				break_count+=1
+				continue
+			
+			pdf_data = pdf_resp.content
+			if not "pdf" in pdf_resp.headers['content-type'] or not pdf_data:
+				break_count+=1
+				continue
+			
+			path.mkdir(parents=True, exist_ok=True)
+			filename.write_bytes(pdf_data)
+			print("\033[32m"+str(filename) + "\tdownloaded")
+			break_count = 0
