@@ -77,11 +77,13 @@ for district in sorted(districts.keys(), reverse=True):
 				pdf_resp = requests.get(req_string, timeout=3)
 			except:
 				break_count+=1
+				print("\033[91m" + str(filename) + "\tget request exception")
 				continue
 			
 			pdf_data = pdf_resp.content
 			if not "pdf" in pdf_resp.headers['content-type'] or not pdf_data:
 				break_count+=1
+				print("\033[91m" + str(filename) + "\tfile not on server")
 				continue
 			
 			path.mkdir(parents=True, exist_ok=True)
