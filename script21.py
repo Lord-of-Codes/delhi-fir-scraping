@@ -27,7 +27,7 @@ districts = {
 	"8956": "EOW",
 	"8957": "SHAHDARA",
 	"8959": "ROHINI",
-	"8991": "OUTER NORTH"
+	# "8991": "OUTER NORTH"
 }
 
 police_stations_get_url = "https://cctns.delhipolice.gov.in/citizen/getfirsearchpolicestations.htm"
@@ -60,7 +60,7 @@ for district in sorted(districts.keys(), reverse=True):
 
 		for number in range(1,10000):
 
-			if break_count > 4 and number > 1000:
+			if break_count > 25:
 				break
 
 			number = "{:04d}".format(number)
